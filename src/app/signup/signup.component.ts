@@ -9,7 +9,15 @@ import {AuthService} from "../services/auth.service";
 })
 export class SignupComponent implements OnInit {
 
-    form:FormGroup;
+    form: FormGroup;
+
+    errors: string[] = [];
+
+    messagePerErrorCode = {
+      min: 'The minimum length is 8 characters',
+      uppercase: 'At least one upper case character',
+      digits: 'At least one numeric character'
+    }
 
     constructor(private fb: FormBuilder, private authService: AuthService) {
 
@@ -18,7 +26,6 @@ export class SignupComponent implements OnInit {
             password: ['',Validators.required],
             confirm: ['',Validators.required]
         });
-
 
     }
 
@@ -34,8 +41,8 @@ export class SignupComponent implements OnInit {
 
             this.authService.signUp(val.email, val.password)
                 .subscribe(
-                    () => console.log("User created successfully"),
-                    console.error
+                    () => console.log('User created successfully'),
+                    response => this.errors = response.error.errors
                 );
 
         }
